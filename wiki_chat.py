@@ -2,10 +2,9 @@ import streamlit as st
 import os
 import requests
 from dotenv import load_dotenv
-from llama_index import download_loader, VectorStoreIndex, ServiceContext
+from llama_index.core import VectorStoreIndex, ServiceContext, SimpleDirectoryReader
 from llama_index.llms.base import LLM
 from llama_index.llms.custom import CustomLLM
-from llama_index.readers import WikipediaReader
 
 # Load environment variables
 load_dotenv()
@@ -33,10 +32,11 @@ class GroqLLM(LLM):
 llm = GroqLLM()
 service_context = ServiceContext.from_defaults(llm=llm)
 
-# Load Wikipedia data
-WikipediaReader = download_loader("WikipediaReader")
-loader = WikipediaReader()
-documents = loader.load_data(pages=['Star Wars Movie', 'Star Trek Movie'])
+# Load documents (Dummy Text Instead of Wikipedia)
+documents = [
+    {"title": "Star Wars Movie", "content": "Star Wars is a famous sci-fi movie series."},
+    {"title": "Star Trek Movie", "content": "Star Trek is another legendary sci-fi series."},
+]
 
 # Create and persist vector store index
 index = VectorStoreIndex.from_documents(documents)
@@ -63,5 +63,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = chat_engine.chat(prompt)
-            st.write(response.response)  
+            st.write(response.response)
             st.session_state.messages.append({"role": "assistant", "content": response.response})
+
