@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from llama_index.core import (
-    VectorStoreIndex, ServiceContext, Document
+    VectorStoreIndex, Document, Settings
 )
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.langchain import LangChainLLM
@@ -58,11 +58,14 @@ if url:
         document = Document(text=page_content)
         index = VectorStoreIndex.from_documents([document], embed_model=embed_model)
 
-        # Initialize LLM & RAG Retriever
+        # ✅ Use `Settings` instead of `ServiceContext`
         llm = get_groq_llm()
-        service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
+        Settings.llm = llm
+        Settings.embed_model = embed_model
+
+        # Initialize RAG Retriever
         retriever = index.as_retriever()
-        query_engine = RetrieverQueryEngine(retriever=retriever, service_context=service_context)
+        query_engine = RetrieverQueryEngine(retriever=retriever)
 
         # Chat interface
         if "messages" not in st.session_state:
