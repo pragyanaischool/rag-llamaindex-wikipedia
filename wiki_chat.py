@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from llama_index.core import VectorStoreIndex, ServiceContext, Document
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding  # ✅ Use Hugging Face Embeddings
-from llama_index.llms.custom import CustomLLM  # ✅ Use CustomLLM instead of LangChainLLM
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.llms import LangChainLLM
 from llama_index.core.query_engine import RetrieverQueryEngine
 
 # Load environment variables
@@ -28,7 +28,7 @@ def fetch_url_content(url):
 
 # Function to initialize Groq's Llama 3 with LangChain
 def get_groq_llm(model="llama3-8b-8192", temperature=0.1):
-    return CustomLLM(
+    return LangChainLLM(
         llm=ChatGroq(
             groq_api_key=GROQ_API_KEY,
             model_name=model,
@@ -69,16 +69,4 @@ if url:
             st.session_state.messages = [{"role": "assistant", "content": "Ask me a question about the webpage!"}]
 
         if prompt := st.chat_input("Your question"):
-            st.session_state.messages.append({"role": "user", "content": prompt})
-
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
-
-        if st.session_state.messages[-1]["role"] != "assistant":
-            with st.chat_message("assistant"):
-                with st.spinner("Retrieving relevant information..."):
-                    response = query_engine.query(prompt)
-                    st.write(response.response)
-                    st.session_state.messages.append({"role": "assistant", "content": response.response})
-
+            st.session_state.messages.append({"role": "user", "
