@@ -1,12 +1,13 @@
 import streamlit as st
 import os
 import requests
+import asyncio
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from llama_index.core import VectorStoreIndex, ServiceContext, Document
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding  # ✅ Use Hugging Face Embeddings
-from llama_index.core.llms import LangChainLLM
+from llama_index.llms.custom import CustomLLM  # ✅ Use CustomLLM instead of LangChainLLM
 from llama_index.core.query_engine import RetrieverQueryEngine
 
 # Load environment variables
@@ -27,7 +28,7 @@ def fetch_url_content(url):
 
 # Function to initialize Groq's Llama 3 with LangChain
 def get_groq_llm(model="llama3-8b-8192", temperature=0.1):
-    return LangChainLLM(
+    return CustomLLM(
         llm=ChatGroq(
             groq_api_key=GROQ_API_KEY,
             model_name=model,
@@ -80,3 +81,4 @@ if url:
                     response = query_engine.query(prompt)
                     st.write(response.response)
                     st.session_state.messages.append({"role": "assistant", "content": response.response})
+
