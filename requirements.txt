@@ -3,3 +3,6 @@ groq
 llama-index
 streamlit
 nltk
+langchain-groq
+requests 
+beautifulsoup4
