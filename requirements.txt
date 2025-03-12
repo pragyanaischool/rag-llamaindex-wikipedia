@@ -7,3 +7,4 @@ langchain-groq
 requests 
 beautifulsoup4
 llama-index-llms-langchain
+sentence-transformers
