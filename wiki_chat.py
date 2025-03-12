@@ -5,7 +5,9 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from llama_index.core import VectorStoreIndex, ServiceContext, Document
-from llama_index.llms import LangChainLLM
+#from llama_index.llms import LangChainLLM
+from llama_index.llms.langchain import LangChainLLM
+
 
 # Load environment variables
 load_dotenv()
