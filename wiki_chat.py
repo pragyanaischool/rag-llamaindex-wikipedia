@@ -1,13 +1,14 @@
 import streamlit as st
 import os
 import requests
-import asyncio
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from llama_index.core import VectorStoreIndex, ServiceContext, Document
+from llama_index.core import (
+    VectorStoreIndex, ServiceContext, Document
+)
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.llms import LangChainLLM
+from llama_index.llms.langchain import LangChainLLM
 from llama_index.core.query_engine import RetrieverQueryEngine
 
 # Load environment variables
@@ -26,7 +27,7 @@ def fetch_url_content(url):
     except requests.exceptions.RequestException as e:
         return f"Error fetching URL: {str(e)}"
 
-# Function to initialize Groq's Llama 3 with LangChain
+# Function to initialize Groq's Llama 3
 def get_groq_llm(model="llama3-8b-8192", temperature=0.1):
     return LangChainLLM(
         llm=ChatGroq(
@@ -56,7 +57,6 @@ if url:
         # Create document and vector index
         document = Document(text=page_content)
         index = VectorStoreIndex.from_documents([document], embed_model=embed_model)
-        index.storage_context.persist(persist_dir="./vectorstore")
 
         # Initialize LLM & RAG Retriever
         llm = get_groq_llm()
