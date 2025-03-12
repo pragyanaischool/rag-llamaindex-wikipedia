@@ -1,4 +1,4 @@
-iimport streamlit as st
+import streamlit as st
 import os
 from dotenv import load_dotenv
 from llama_index.llms import Groq
