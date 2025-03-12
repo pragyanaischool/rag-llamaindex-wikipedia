@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from llama_index.core import VectorStoreIndex, ServiceContext, SimpleDirectoryReader
-from llama_index.llms.custom import CustomLLM
+from llama_index.llms import CustomLLM
 
 # Load environment variables
 load_dotenv()
