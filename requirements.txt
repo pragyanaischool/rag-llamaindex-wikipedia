@@ -1,6 +1,5 @@
 python-dotenv
-openai
+groq
 llama-index
 streamlit
 nltk
-
