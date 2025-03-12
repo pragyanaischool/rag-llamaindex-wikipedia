@@ -69,4 +69,15 @@ if url:
             st.session_state.messages = [{"role": "assistant", "content": "Ask me a question about the webpage!"}]
 
         if prompt := st.chat_input("Your question"):
-            st.session_state.messages.append({"role": "user", "
+            st.session_state.messages.append({"role": "user", "content": prompt})
+
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.write(message["content"])
+
+        if st.session_state.messages[-1]["role"] != "assistant":
+            with st.chat_message("assistant"):
+                with st.spinner("Retrieving relevant information..."):
+                    response = query_engine.query(prompt)
+                    st.write(response.response)
+                    st.session_state.messages.append({"role": "assistant", "content": response.response})
