@@ -1,7 +1,6 @@
-import streamlit as st
+iimport streamlit as st
 import os
 from dotenv import load_dotenv
-from llama_index.response.pprint_utils import pprint_response
 from llama_index.llms import Groq
 from llama_index import download_loader, VectorStoreIndex, ServiceContext
 from llama_index.readers import WikipediaReader
@@ -46,6 +45,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = chat_engine.chat(prompt)
-            st.write(response.response)
-            pprint_response(response, show_source=True)
+            st.write(response.response)  # FIX: Removed pprint_response
             st.session_state.messages.append({"role": "assistant", "content": response.response})
+
