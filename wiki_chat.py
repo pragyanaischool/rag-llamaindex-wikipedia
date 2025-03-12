@@ -3,7 +3,6 @@ import os
 import requests
 from dotenv import load_dotenv
 from llama_index.core import VectorStoreIndex, ServiceContext, SimpleDirectoryReader
-from llama_index.llms.base import LLM
 from llama_index.llms.custom import CustomLLM
 
 # Load environment variables
@@ -11,7 +10,7 @@ load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Custom Groq API Wrapper
-class GroqLLM(LLM):
+class GroqLLM(CustomLLM):
     def __init__(self, model="llama3-8b-8192", temperature=0.1):
         self.model = model
         self.temperature = temperature
@@ -32,7 +31,7 @@ class GroqLLM(LLM):
 llm = GroqLLM()
 service_context = ServiceContext.from_defaults(llm=llm)
 
-# Load documents (Dummy Text Instead of Wikipedia)
+# Load example documents
 documents = [
     {"title": "Star Wars Movie", "content": "Star Wars is a famous sci-fi movie series."},
     {"title": "Star Trek Movie", "content": "Star Trek is another legendary sci-fi series."},
@@ -65,4 +64,3 @@ if st.session_state.messages[-1]["role"] != "assistant":
             response = chat_engine.chat(prompt)
             st.write(response.response)
             st.session_state.messages.append({"role": "assistant", "content": response.response})
-
